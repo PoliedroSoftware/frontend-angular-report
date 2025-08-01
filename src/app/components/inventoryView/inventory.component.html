@@ -1,0 +1,77 @@
+<div class="table-container table-año">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Utilidad Por Año</h2>
+
+      <div class="print-buttons">
+        <button>Excel</button>
+        <button>PDF</button>
+      </div>
+
+      <div class="search">
+        <p>Search:</p>
+        <input type="text" />
+      </div>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Sku</th>
+          <th>Name</th>
+          <th>Presentacion</th>
+          <th>Cost</th>
+          <th>Sale</th>
+          <th>Inventory</th>
+          <th>Percentage</th>
+          <th>Subtotal Cost</th>
+          <th>Subtotal Sale</th>
+        </tr>
+      </thead>
+      <tbody>
+     
+        <tr *ngFor="let row of inventarios">
+          <td>{{ row.sku }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.presentation }}</td>
+          <td>{{ row.cost }}</td>
+          <td>{{ row.sale }}</td>
+          <td>{{ row.inventory }}</td>
+          <td>{{ row.percentage }}</td>
+          <td>{{ row.subtotal_Cost }}</td>
+          <td>{{ row.subtotal_sale }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="getInventory(1, this.varPagination)"
+            >1</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getInventory(2, this.varPagination)"
+            >2</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getInventory(3, this.varPagination)"
+            >3</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getInventory(4, this.varPagination)"
+            >4</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getInventory(5, this.varPagination)"
+            >5</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </section>
+</div>

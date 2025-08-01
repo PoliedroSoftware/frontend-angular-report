@@ -1,0 +1,139 @@
+
+
+<div class="table-container table-año">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Año</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Ventas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        
+      <tr *ngFor="let row of ventas.forYear">
+          <td>{{ row.year }}</td>
+          <td>{{ row.sale }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+
+  </section>
+</div>
+
+
+<div class="table-container table-mes">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Mes</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Mes</th>
+          <th>Ventas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of ventas.forMonth">
+          <td>{{ row.numberMonth }}</td>
+          <td>{{ row.month }}</td>
+          <td>{{ row.year }}</td>
+          <td>{{ row.sale }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+
+  </section>
+</div>
+
+
+<div class="table-container table-dia">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Día</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Mes</th>
+          <th>Fecha</th>
+           <th>Año</th>
+          <th>Ventas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+      <tr *ngFor="let row of ventas.forDay">
+          <td>{{ row.date }}</td>
+          <td>{{ row.numberMonth }}</td>
+          <td>{{ row.month }}</td>
+          <td>{{ row.year }}</td>
+          <td>{{ row.sale }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+   <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+    
+        <li class="page-item"><a class="page-link"  (click)="getSaleService(1,this.varPaginacion)">1</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSaleService(2, this.varPaginacion)">2</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSaleService(3, this.varPaginacion)">3</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSaleService(4, this.varPaginacion)">4</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSaleService(5, this.varPaginacion)">5</a></li>
+       
+      </ul>
+    </nav>
+    
+  </section>
+</div>
+ 

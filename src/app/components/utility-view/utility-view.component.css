@@ -1,0 +1,121 @@
+
+
+.table-container{
+width: 100%;
+display: flex;
+min-height: 70vh;
+justify-content: center;
+padding-top: 2rem;
+padding-bottom: 2rem;
+}
+
+
+.tables{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-container{
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.title-container h2{
+  text-align: center;
+  width: 100%;
+  font-weight: 400;
+}
+
+.title-container .print-buttons{
+  width: 50%;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.print-buttons button{
+  background-image:
+  linear-gradient(rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  height: 39px;
+  width: 55px;
+  border: solid 1px gray;
+  border-radius: 2px;
+  font-size: 14px;
+}
+.title-container .search{
+  width: 50%;
+  display: flex;
+  gap: 7px;
+  justify-content: end;
+  align-items: center;
+  padding-right: 2px;
+}
+
+.search input{
+  width: 200px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding-left: 10px;
+}
+
+.search p{
+  padding-top: 18px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  
+}
+
+.custom-table th, .custom-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.custom-table th{
+  text-align: center;
+  border-bottom: 1px solid black;
+  }
+
+.custom-table thead {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+.pagination-container{
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.pagination{
+display: flex;
+gap: 10px;
+padding-right: 20px;
+}
+
+.pagination .page-link{
+  color: black;
+}
+
+.pagination .controllers{
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  text-align: end;
+}
+.controllers p{
+  margin-top: 7px;
+}

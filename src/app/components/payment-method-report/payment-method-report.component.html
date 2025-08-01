@@ -1,0 +1,134 @@
+<div class="table-container table-año">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Año Metodos de Pago</h2>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Metodo de Pago</th>
+          <th>Total Pagado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of ventas_medios.forYear">
+          <td>{{ row.year }}</td>
+          <td>{{ row.paymentMethod }}</td>
+          <td>{{ row.totalPaid | number : "1.0-0" }}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><strong>Total del anio</strong></td>
+          <td>
+            <strong>{{ totalAnio }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<div class="table-container table-mes">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Mes</h2>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Mes</th>
+          <th>Metodo de Pago</th>
+          <th>Total Pagado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr *ngFor="let mes of ventas_medios.forMonth">
+            <td>{{ mes.year }}</td>
+            <td>{{ mes.month }}</td>
+            <td>{{ mes.paymentMethod }}</td>
+            <td>{{ mes.totalPaid }}</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" class="text-right">
+              <strong>Total del mes</strong>
+            </td>
+            <td class="text-right">
+              <strong>{{ totalMes }}</strong>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<div class="table-container table-dia">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Día</h2>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Metodo de Pago</th>
+          <th>Total Pagado</th>
+          <th>Total Ventas</th>
+          <th>Total Ventas x Dia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr *ngFor="let row of ventas_medios.forDay">
+            <td>{{ row.paymentMethod }}</td>
+            <td>{{ row.totalPaid }}</td>
+            <td>{{ row.totalSales }}</td>
+            <td>{{ row.totalSalesDay }}</td>
+            <td class="text-right">{{ row.utilidad | number : "1.0-0" }}</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" class="text-right">
+              <strong>Total del día</strong>
+            </td>
+            <td class="text-right">
+              <strong>{{ totalDia }}</strong>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" (click)="getPaymenMethod(1, this.varPagination)"
+            >1</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getPaymenMethod(2, this.varPagination)"
+            >2</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getPaymenMethod(3, this.varPagination)"
+            >3</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getPaymenMethod(4, this.varPagination)"
+            >4</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link" (click)="getPaymenMethod(5, this.varPagination)"
+            >5</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </section>
+</div>

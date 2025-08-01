@@ -1,0 +1,96 @@
+
+<div class="table-container table-año">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Borrador Cliente</h2>
+    </div>
+  
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Referencia</th>
+          <th>Cliente</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data">
+          <td>{{ row.Fecha }}</td>
+          <td>{{ row.Referencia }}</td>
+          <td>{{ row.Cliente }}</td>
+          <td>{{ row.Total }}</td>
+        </tr>
+        <tr *ngIf="data.length > 0" class="total-row">
+         
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+
+
+
+
+<div class="table-container table-dia">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Ventas Por Día</h2>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Codigo</th>
+          <th>Producto</th>
+          <th>Precio</th>
+        <th>Cantidad</th>
+          <th>Total Parcial</th>
+          <th>Cliente</th>
+          <th>Referencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr *ngFor="let item of data2">
+            <td>{{ item.Fecha }}</td>
+            <td>{{ item.Codigo }}</td>
+            <td>{{ item.Producto }}</td>
+            <td>{{ item.Precio }}</td>
+            <td>{{ item.Cantidad }}</td>
+             <td>{{ item.Total }}</td>
+             <td>{{ item.Cliente }}</td>
+            <td>{{ item.Referencia }}</td>
+          
+          
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" class="text-right"><strong>Total del día</strong></td>
+           
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+     <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+       
+   
+   
+   
+         <li class="page-item"><a class="page-link" (click)="this.getDraft(2,this.varPagination);">1</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getDraft(2,this.varPagination);">2</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getDraft(2,this.varPagination);">3</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getDraft(2,this.varPagination);">4</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getDraft(2,this.varPagination);">5</a></li>
+      
+       
+      </ul>
+    </nav>
+
+       
+  </section>
+</div>

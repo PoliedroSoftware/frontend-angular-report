@@ -1,0 +1,116 @@
+<div class="table-container">
+
+  <section class="tables">
+    <div class="title-container total-container">
+      <h2>Saldo Total</h2>
+    </div>
+  
+    <table class="custom-table total">
+      <tbody>
+        <tr>
+          <td><strong>Saldo Total Proveedores</strong></td>
+        </tr>
+        <tr>
+          <td>77.241.133</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+
+<div class="table-container">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Saldo Por Proveedor</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Proveedor</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of data.slice(0, 7)">
+          <td>{{ row.proveedor }}</td>
+          <td>{{ row.saldo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+
+
+  </section>
+</div>
+
+
+<div class="table-container">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Saldo Por Facturas</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Proveedor</th>
+          <th>Asesor</th>
+          <th>Factura</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of data2.slice(0, 7)">
+          <td>{{ row.fecha }}</td>
+          <td>{{ row.proveedor }}</td>
+          <td>{{ row.asesor }}</td>
+          <td>{{ row.factura }}</td>
+          <td>{{ row.saldo }}</td>
+        </tr>
+      </tbody>
+    </table>
+     <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+    
+        <li class="page-item"><a class="page-link"  (click)="getSupplierService(1, this.varPaginacion)">1</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSupplierService(2, this.varPaginacion)">2</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSupplierService(3, this.varPaginacion)">3</a></li>
+        <li class="page-item"><a class="page-link"  (click)="getSupplierService(4, this.varPaginacion)">4</a></li>
+        <li class="page-item"><a class="page-link"  (click)=" getSupplierService(5, this.varPaginacion)">5</a></li>
+       
+      </ul>
+    </nav> 
+  
+<!-- es un ejemplo -->
+   
+  </section>
+</div>

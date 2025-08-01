@@ -1,0 +1,118 @@
+<div class="table-container table-año">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Borrador por Cliente</h2>
+
+      <div class="print-buttons">
+        <button>Excel</button>
+        <button>PDF</button>
+      </div>
+
+      <div class="search">
+        <p>Search:</p>
+        <input type="text" />
+      </div>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Referencia</th>
+          <th>Cliente</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="data.length > 0; else noData">
+          <tr *ngFor="let row of data.slice(0, 7)">
+            <td>{{ row.fecha }}</td>
+            <td>{{ row.referencia }}</td>
+            <td>{{ row.cliente }}</td>
+            <td>{{ row.total }}</td>
+          </tr>
+        </ng-container>
+
+        <ng-template #noData>
+          <tr>
+            <td colspan="4" class="notData">No data available in table</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="controllers"><p>Previous</p></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="controllers"><p>Next</p></li>
+      </ul>
+    </nav>
+  </section>
+</div>
+
+<div class="table-container table-mes">
+  <section class="tables">
+    <div class="title-container">
+      <h2>Detalle de Producto por Borrador</h2>
+
+      <div class="print-buttons">
+        <button>Excel</button>
+        <button>PDF</button>
+      </div>
+
+      <div class="search">
+        <p>Search:</p>
+        <input type="text" />
+      </div>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Código</th>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+          <th>Cliente</th>
+          <th>Referencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="data2.length > 0; else noData">
+          <tr *ngFor="let row of data2.slice(0, 7)">
+            <td>{{ row.fecha }}</td>
+            <td>{{ row.codigo }}</td>
+            <td>{{ row.producto }}</td>
+            <td>{{ row.precio | number : "1.0-0" }}</td>
+            <td>{{ row.cantidad }}</td>
+            <td>{{ row.subtotal | number : "1.0-0" }}</td>
+            <td>{{ row.cliente }}</td>
+            <td>{{ row.referencia }}</td>
+          </tr>
+        </ng-container>
+        <ng-template #noData>
+          <tr>
+            <td colspan="8" style="text-align: center">
+              No data available in table
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="controllers"><p>Previous</p></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="controllers"><p>Next</p></li>
+      </ul>
+    </nav>
+  </section>
+</div>

@@ -1,0 +1,152 @@
+<div class="table-container table-año">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Utilidad Por Año</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Utilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of utility.forYear">
+         
+          <td>{{ row.year }}</td>
+          <td>{{ row.utility }}</td>
+
+
+        </tr>
+      </tbody>
+    </table>
+  
+
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link"  (click)="this.getUtility(1,this.varPaginacion);">1</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(2,this.varPaginacion);">2</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(3,this.varPaginacion);">3</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(4,this.varPaginacion);">4</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(5,this.varPaginacion);">5</a></li>
+      </ul>
+    </nav>
+  </section>
+</div>
+
+
+<div class="table-container table-mes">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Utilidad Por Mes</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Mes</th>
+          <th>Utilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of utility.forMonth">
+          <td>{{ row.year }}</td>
+          <td>{{ row.month }}</td>
+          <td>{{ row.utility }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        
+        <li class="page-item"><a class="page-link"  (click)="this.getUtility(1,10);">1</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(2,10);">2</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(3,10);">3</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(4,10);">4</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(5,10);">5</a></li>
+      </ul>
+    </nav>
+  </section>
+</div>
+
+
+<div class="table-container table-dia">
+
+  <section class="tables">
+    <div class="title-container">
+      <h2>Utilidad Por Día</h2>
+  
+      <div class="print-buttons">
+        <button >Excel</button>
+        <button >PDF</button>
+      </div>
+  
+      <div class="search">
+        <p>Search:</p>
+        <input type="text"/>
+      </div>
+    </div>
+  
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Año</th>
+          <th>Mes</th>
+          <th>Fecha</th>
+          <th>Utilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
+        <tr *ngFor="let row of utility.forDay">
+          <td>{{ row.year }}</td>
+          <td>{{ row.month }}</td>
+          <td>{{ row.utility }}</td>
+          <td>{{ row.date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+<!-- es un ejemplo -->
+    <nav class="pagination-container" aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(1,10);">1</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(2,10)">2</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(3,10);">3</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(4,10);">4</a></li>
+        <li class="page-item"><a class="page-link" (click)="this.getUtility(5,10);">5</a></li>
+      </ul>
+    </nav>
+  </section>
+</div>
