@@ -13,7 +13,7 @@ export class InventoryService {
   constructor( private http:HttpClient) { }
   getInventory(PNumber: number, PSize: number) {
     const headers = new HttpHeaders({
-      'X-Environment': 'production-report'
+      'X-Environment': 'production-production-report-el-poste-rojo'
     });
     const options = { headers };
     const endpoint = `${this.url}/inventory-report?PageNumber=${PNumber}&PageSize=${PSize}`;
