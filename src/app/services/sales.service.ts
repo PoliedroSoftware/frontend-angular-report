@@ -12,7 +12,7 @@ export class VentasService {
 
   getSales(PNumber: number, PSize: number) {
     const headers = new HttpHeaders({
-      'X-Environment': environment.Headers.toString(),
+      'X-Environment': environment.Headers,
     });
     const options = { headers };
     const endpoint = `${this.url}/sales-report?PageNumber=${PNumber}&PageSize=${PSize}`;
