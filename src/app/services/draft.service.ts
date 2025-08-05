@@ -13,7 +13,7 @@ export class DraftService {
 
   getDraft(PNumber: number, PSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'X-Environment': environment.Headers.toString()
+      'X-Environment': environment.Headers,
     });
     const options = { headers };
     const endpoint = `${this.url}/draft-report?PageNumber=${PNumber}&PageSize=${PSize}`;
