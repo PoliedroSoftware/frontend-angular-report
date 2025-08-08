@@ -1,0 +1,156 @@
+name: Build, Test, Deploy Angular to ECS
+
+on:
+  push:
+    branches:
+      - feature/test-github-actions
+
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+      - 'release/*'
+      - 'releasecandidate/*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  angular:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install depends
+        run: npm ci
+
+      - name: Build Angular
+        run: npm run build -- --configuration production
+
+  docker:
+    needs: [angular]
+    runs-on: ubuntu-latest
+    environment: QA
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set AWS region
+        run: |
+          echo "Setting AWS region..."
+          aws configure set region ${{ secrets.AWS_REGION }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image..."
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_ANGULAR_REPORT_REPOSITORY }}:latest .
+
+      - name: Tag Docker image
+        run: |
+          echo "Tagging Docker image..."
+          docker tag ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_ANGULAR_REPORT_REPOSITORY }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_ANGULAR_REPORT_REPOSITORY }}:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          echo "Pushing Docker image to ECR..."
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_ANGULAR_REPORT_REPOSITORY }}:latest    
+
+  docker-hub:
+    needs: [angular]
+    runs-on: ubuntu-latest
+    environment: QA
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_ANGULAR_REPORT }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push to Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME_ANGULAR_REPORT }}/${{ secrets.DOCKERHUB_REPOSITORY_ANGULAR_REPORT }}:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME_ANGULAR_REPORT }}/${{ secrets.DOCKERHUB_REPOSITORY_ANGULAR_REPORT }}:buildcache
+          cache-to: type=inline
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    environment: QA
+
+    steps:
+      - name: Set AWS region
+        run: |
+          echo "Setting AWS region......"
+          aws configure set region ${{ secrets.AWS_REGION }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Amazon ECS
+        run: |
+          # Use the task definition ARN from Secrets
+          ecs_task_definition_arn="${{ secrets.TASK_DEFINITION_ARN_ANGULAR_REPORT }}"
+          echo "Using task definition ARN: $ecs_task_definition_arn"
+          
+          # Force service update with the existing task definition
+          ecs_deploy=$(aws ecs update-service \
+            --cluster ${{ secrets.AWS_ECS_CLUSTER }} \
+            --service ${{ secrets.AWS_ECS_ANGULAR_REPORT_SERVICE }} \
+            --task-definition $ecs_task_definition_arn \
+            --force-new-deployment)
+          
+          echo "ECS deployment result: $ecs_deploy"
+
+      - name: Check ECS Service Status
+        run: |
+          echo "Checking ECS service status..."
+          service_status=$(aws ecs describe-services \
+            --cluster ${{ secrets.AWS_ECS_CLUSTER }} \
+            --services ${{ secrets.AWS_ECS_ANGULAR_REPORT_SERVICE }} \
+            --query 'services[0].status' --output text)
+          
+          echo "Service status: $service_status"
+
+      - name: Check ECS Task Definition
+        run: |
+          echo "Checking task definition image..."
+          task_definition_image=$(aws ecs describe-task-definition \
+            --task-definition ${{ secrets.TASK_DEFINITION_ARN_ANGULAR_REPORT }} \
+            --query 'taskDefinition.containerDefinitions[0].image' --output text)
+          
+          echo "Task definition image: $task_definition_image"
