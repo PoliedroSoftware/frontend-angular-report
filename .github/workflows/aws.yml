@@ -32,7 +32,7 @@ jobs:
           cache: 'npm'
 
       - name: Install depends
-        run: npm ci
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
 
       - name: Build Angular
         run: npm run build -- --configuration production
