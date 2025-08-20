@@ -28,7 +28,7 @@
         <tr *ngFor="let row of utility.forYear">
          
           <td>{{ row.year }}</td>
-          <td>{{ row.utility }}</td>
+          <td>{{ row.utilityFormatted }}</td>
 
 
         </tr>
@@ -80,7 +80,7 @@
         <tr *ngFor="let row of utility.forMonth">
           <td>{{ row.year }}</td>
           <td>{{ row.month }}</td>
-          <td>{{ row.utility }}</td>
+          <td>{{ row.utilityFormatted }}</td>
         </tr>
       </tbody>
     </table>
@@ -132,8 +132,8 @@
         <tr *ngFor="let row of utility.forDay">
           <td>{{ row.year }}</td>
           <td>{{ row.month }}</td>
-          <td>{{ row.utility }}</td>
           <td>{{ row.date }}</td>
+          <td>{{ row.utilityFormatted }}</td>
         </tr>
       </tbody>
     </table>

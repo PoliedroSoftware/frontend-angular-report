@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PaymentMethodReport } from './payment-method-report';
-//import { HEROES } from './mock-heroes';
 import { PaymentMethodService } from '@services/payment-method.service';
 import { environment } from '@environments/environment';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { authConfig } from '../../auth.config';
 @Component({
   selector: 'app-ventas-medios',
   standalone: true,
@@ -25,16 +26,29 @@ export class PaymentMethodComponent implements OnInit {
   totalMes: any;
   totalDia: any;
 
-  constructor(private ventasMediosService: PaymentMethodService) {}
+  constructor(
+    private paymentMethodService: PaymentMethodService,
+    private oauthService: OAuthService
+  ) {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    this.configureOAuth();
+  }
+
+  configureOAuth(): void {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+      const idToken = this.oauthService.getIdToken();
+      console.log('ID Token:', idToken);
+    });
+  }
 
   ngOnInit() {
-    // Agrupar data2 por año y mes
-
     this.getPaymenMethod(1, this.varPagination);
   }
 
   getPaymenMethod(valor1: any, valor2: any): void {
-    this.ventasMediosService
+    this.paymentMethodService
       .getPaymenMethod(valor1, valor2)
       .subscribe((response) => {
         this.ventas_medios = response;

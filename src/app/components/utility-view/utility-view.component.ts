@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Utility } from './utility';
 import { UtilityService } from '@services/utility.service';
-
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { environment } from '@environments/environment';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { authConfig } from '../../auth.config';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,21 @@ export class UtilityComponent {
   Resultados: number = 0;
   varPaginacion: any = environment.paginationVar;
 
-  constructor(private utilityService: UtilityService) {}
+  constructor(
+    private utilityService: UtilityService,
+    private oauthService: OAuthService
+  ) {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    this.configureOAuth();
+  }
+
+  configureOAuth(): void {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+      const idToken = this.oauthService.getIdToken();
+    });
+  }
 
   ngOnInit() {
     this.getUtility(1, this.varPaginacion);

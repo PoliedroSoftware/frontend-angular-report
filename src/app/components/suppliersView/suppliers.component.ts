@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SuppliersService } from '@services/suppliers.service';
 import { environment } from '@environments/environment';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { authConfig } from '../../auth.config';
 
 @Component({
   selector: 'app-proveedores',
@@ -100,18 +102,31 @@ export class SuppliersComponent {
   totalMes: any;
   totalDia: any;
 
-  constructor(private suppliersService: SuppliersService) {}
+  constructor(
+    private suppliersService: SuppliersService,
+    private oauthService: OAuthService
+  ) {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    this.configureOAuth();
+  }
+
+  configureOAuth(): void {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
+      const idToken = this.oauthService.getIdToken();
+      console.log('ID Token:', idToken);
+    });
+  }
 
   ngOnInit() {
-    // Agrupar data2 por año y mes
-
     this.getSupplierService(1, this.varPaginacion);
   }
 
   getSupplierService(valor1: any, valor2: any): void {
     this.proveedores = [];
     this.suppliersService.getSuppliers(valor1, valor2).subscribe((result) => {
-      result.forEach((dato:any) => this.proveedores.push(dato));
+      result.forEach((dato: any) => this.proveedores.push(dato));
     });
   }
 }
