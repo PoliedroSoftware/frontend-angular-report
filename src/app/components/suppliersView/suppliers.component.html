@@ -11,7 +11,7 @@
           <td><strong>Saldo Total Proveedores</strong></td>
         </tr>
         <tr>
-          <td>77.241.133</td>
+          <td>{{proveedores}}</td>
         </tr>
       </tbody>
     </table>
@@ -45,8 +45,8 @@
         </tr>
       </thead>
       <tbody>
-        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
-        <tr *ngFor="let row of data.slice(0, 7)">
+        
+        <tr *ngFor="let row of proveedores.slice(0, 7)">
           <td>{{ row.proveedor }}</td>
           <td>{{ row.saldo }}</td>
         </tr>
@@ -88,8 +88,8 @@
         </tr>
       </thead>
       <tbody>
-        <!-- 7 filas estáticas de ejemplo, traer la información desde la API -->
-        <tr *ngFor="let row of data2.slice(0, 7)">
+      
+        <tr *ngFor="let row of proveedores.slice(0, 7)">
           <td>{{ row.fecha }}</td>
           <td>{{ row.proveedor }}</td>
           <td>{{ row.asesor }}</td>
@@ -110,7 +110,7 @@
       </ul>
     </nav> 
   
-<!-- es un ejemplo -->
+
    
   </section>
 </div>

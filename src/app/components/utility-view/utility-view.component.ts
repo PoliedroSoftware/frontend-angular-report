@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Utility } from './utility';
 import { UtilityService } from '@services/utility.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environments/environment';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { authConfig } from '../../auth.config';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ import { authConfig } from '../../auth.config';
   templateUrl: './utility-view.component.html',
   styleUrl: './utility-view.component.css',
 })
-export class UtilityComponent {
+export class UtilityComponent  implements OnInit, OnDestroy {
   utility: any;
 
   valor1: any = 1;
@@ -25,30 +26,29 @@ export class UtilityComponent {
   arrayPages: [] = [];
   Resultados: number = 0;
   varPaginacion: any = environment.paginationVar;
+   private destroy$ = new Subject<void>();
 
   constructor(
     private utilityService: UtilityService,
-    private oauthService: OAuthService
+   
   ) {
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    this.configureOAuth();
+   
   }
 
-  configureOAuth(): void {
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
-      const idToken = this.oauthService.getIdToken();
-    });
-  }
+ 
 
   ngOnInit() {
     this.getUtility(1, this.varPaginacion);
   }
 
   getUtility(valor1: any, valor2: any): void {
-    this.utilityService.getUtility(valor1, valor2).subscribe((response) => {
+    this.utilityService.getUtility(valor1, valor2).pipe(takeUntil(this.destroy$) ).subscribe((response) => {
       this.utility = response;
     });
   }
+
+  ngOnDestroy() {
+  this.destroy$.next();   
+  this.destroy$.complete();
+}
 }

@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 
 
 
-//import { HEROES } from './mock-heroes';
+
 
 
 @Injectable({

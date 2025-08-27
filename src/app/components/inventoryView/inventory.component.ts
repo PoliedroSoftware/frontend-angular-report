@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Inventarios } from './inventory';
 import { InventoryService } from '@services/inventory.service';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../../auth.config';
+import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inventory',
@@ -15,7 +15,7 @@ import { authConfig } from '../../auth.config';
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.css',
 })
-export class InventoryComponent implements OnInit {
+export class InventoryComponent implements OnInit, OnDestroy {
   inventarios: any;
   myArray: any;
   valor1: any = 1;
@@ -24,10 +24,14 @@ export class InventoryComponent implements OnInit {
   arrayPages: [] = [];
   Resultados: number = 0;
   transform: any;
+  private destroy$ = new Subject<void>();
   constructor(
     private inventoryService: InventoryService,
     private oauthService: OAuthService
   ) {
+
+    
+
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.configureOAuth();
@@ -46,8 +50,10 @@ export class InventoryComponent implements OnInit {
 
 
   getInventory(valor1: any, valor2: any): void {
-    this.inventoryService.getInventory(valor1, valor2).subscribe((result) => {
+    this.inventoryService.getInventory(valor1, valor2).pipe(takeUntil(this.destroy$)).subscribe((result) => {
       console.log('Inventario recibido:', result);
+
+      
       this.myArray = Object.values(result); //🔥 Esto convierte el objeto en un array
       // 🔹 Usando forEach
       this.myArray.forEach((inventario: Inventarios) => {
@@ -71,6 +77,9 @@ export class InventoryComponent implements OnInit {
     });
   }
 
+
+  
+
   logout(): void {
     const idToken = this.oauthService.getIdToken();
     const logoutUrl =
@@ -84,5 +93,11 @@ export class InventoryComponent implements OnInit {
     console.log(logoutUrl1);
     window.location.href = logoutUrl;
   }
+
+  ngOnDestroy() {
+  this.destroy$.next();   
+  this.destroy$.complete();
 }
-//aca acaba
+
+}
+

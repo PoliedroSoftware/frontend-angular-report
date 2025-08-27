@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environments/environment';
 import { VentasService } from '@services/sales.service';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { authConfig } from '../../auth.config';
-import { map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
 
 
 @Component({
@@ -13,7 +13,9 @@ import { map } from 'rxjs/operators';
   templateUrl: './sales.component.html',
   styleUrl: './sales.component.css',
 })
-export class SalesComponent {
+
+
+export class SalesComponent implements OnInit, OnDestroy {
   utilidades: Array<any> = [];
   miArray: any[][] = [];
   valor1: any = 1;
@@ -25,21 +27,14 @@ export class SalesComponent {
   totalAnio: any;
   totalMes: any;
   totalDia: any;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private ventasService: VentasService,
-    private oauthService: OAuthService
-  ) {
-    //this.oauthService.configure(authConfig);
-    //this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    //this.configureOAuth();
-  }
 
-  configureOAuth(): void {
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
-    const idToken = this.oauthService.getIdToken();
-    });
+  ) {
+  
+
   }
 
   ngOnInit() {
@@ -47,9 +42,14 @@ export class SalesComponent {
   }
 
   getSaleService(valor1: any, valor2: any): void {
-    this.ventasService.getSales(valor1, valor2).subscribe((response) => {
+    this.ventasService.getSales(valor1, valor2).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.ventas = response;
     
     });
   }
+
+  ngOnDestroy() {
+  this.destroy$.next();   // 🚨 cancela todo
+  this.destroy$.complete();
+}
 }
