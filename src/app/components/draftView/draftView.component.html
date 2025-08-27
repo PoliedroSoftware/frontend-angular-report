@@ -16,13 +16,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of data">
+        <tr *ngFor="let row of draft">
           <td>{{ row.Fecha }}</td>
           <td>{{ row.Referencia }}</td>
           <td>{{ row.Cliente }}</td>
           <td>{{ row.Total }}</td>
         </tr>
-        <tr *ngIf="data.length > 0" class="total-row">
+        <tr *ngIf="draft.length > 0" class="total-row">
          
         </tr>
       </tbody>
@@ -56,7 +56,7 @@
       </thead>
       <tbody>
         <ng-container>
-          <tr *ngFor="let item of data2">
+          <tr *ngFor="let item of draft">
             <td>{{ item.Fecha }}</td>
             <td>{{ item.Codigo }}</td>
             <td>{{ item.Producto }}</td>

@@ -24,7 +24,7 @@ export class PruebaAuthComponent implements OnInit {
    
 
   ngOnInit(): void {
-    // Aquí va tu lógica de inicialización
+    
     this.login();
    
 
@@ -36,7 +36,7 @@ login() {
 
   logout() {
  
-    this.oauthService.logOut(); // ← Esto redirige al endpoint de logout
+    this.oauthService.logOut(); 
 
   }
 }

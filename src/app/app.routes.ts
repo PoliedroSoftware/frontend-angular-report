@@ -9,7 +9,6 @@ import { PruebaAuthComponent } from '@components/prueba-auth/prueba-auth.compone
 
 
 export const routes: Routes = [
- // { path: 'utilidad', component: UtilidadComponent },
   { path: 'suppliers', component: SuppliersComponent },
   { path: 'inventory', component: InventoryComponent },
   { path: 'sales', component: SalesComponent  },
