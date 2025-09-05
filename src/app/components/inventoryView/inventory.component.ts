@@ -21,9 +21,19 @@ export class InventoryComponent implements OnInit, OnDestroy {
   valor1: any = 1;
   valor2: any = 2;
   varPagination: any = environment.paginationVar;
-  arrayPages: [] = [];
+  arrayPages: number[] = [];
   Resultados: number = 0;
   transform: any;
+  
+  // Propiedades de paginación
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalRecords: number = 0;
+  pageSize: number = environment.paginationVar;
+  
+  // Hacer Math disponible en el template
+  Math = Math;
+  
   private destroy$ = new Subject<void>();
   constructor(
     private inventoryService: InventoryService,
@@ -49,32 +59,86 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
 
-  getInventory(valor1: any, valor2: any): void {
-    this.inventoryService.getInventory(valor1, valor2).pipe(takeUntil(this.destroy$)).subscribe((result) => {
-      console.log('Inventario recibido:', result);
-
+  getInventory(pageNumber: number, pageSize: number): void {
+    this.inventoryService.getInventory(pageNumber, pageSize).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      console.log('Inventario recibido:', response);
       
-      this.myArray = Object.values(result); //🔥 Esto convierte el objeto en un array
-      // 🔹 Usando forEach
+      // Extraer los datos y la información de paginación
+      this.myArray = response.data || [];
+      this.currentPage = pageNumber;
+      this.totalPages = response.totalPages || 1;
+      this.totalRecords = response.totalRows || 0;
+      this.pageSize = pageSize;
+      
+      // Generar array de páginas para la paginación
+      this.generatePageNumbers();
+      
+      // 🔹 Formatear los valores monetarios
       this.myArray.forEach((inventario: Inventarios) => {
-        const formatCOP = (valor: any) =>
+        const formatCOP = (valor: number) =>
           new Intl.NumberFormat('es-CO', {
             style: 'currency',
             currency: 'COP',
             minimumFractionDigits: 0,
           }).format(valor);
-        console.log(
-          `ID: ${inventario.name}, Nombre: ${inventario.sku}, Precio: ${inventario.sale}`
-        );
 
-        inventario.costFormatted= formatCOP(inventario.cost),
-        inventario.saleFormatted= formatCOP(inventario.sale),
-        inventario.subtotalCostFormatted= formatCOP(inventario.subtotal_Cost),
-        inventario.subtotalSaleFormatted= formatCOP(inventario.subtotal_sale),
+        inventario.costFormatted = formatCOP(inventario.cost);
+        inventario.saleFormatted = formatCOP(inventario.sale);
+        inventario.subtotalCostFormatted = formatCOP(inventario.subtotal_Cost);
+        inventario.subtotalSaleFormatted = formatCOP(inventario.subtotal_sale);
+      });
 
-        console.log(this.transform);
+      console.log('Datos procesados:', {
+        currentPage: this.currentPage,
+        totalPages: this.totalPages,
+        totalRecords: this.totalRecords,
+        data: this.myArray
       });
     });
+  }
+
+  // Generar números de página para mostrar en la paginación
+  generatePageNumbers(): void {
+    this.arrayPages = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+    
+    // Ajustar si estamos cerca del final
+    if (endPage - startPage + 1 < maxPagesToShow) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      this.arrayPages.push(i);
+    }
+  }
+
+  // Métodos de navegación
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.getInventory(page, this.pageSize);
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  goToFirstPage(): void {
+    this.goToPage(1);
+  }
+
+  goToLastPage(): void {
+    this.goToPage(this.totalPages);
   }
 
 

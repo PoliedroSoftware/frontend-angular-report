@@ -13,7 +13,7 @@ export class InventoryService {
   private url: string = environment.url;
   constructor(private http: HttpClient) {}
 
-  getInventory(PNumber: number, PSize: number): Observable<Inventarios[]> {
+  getInventory(PNumber: number, PSize: number): Observable<InventoryResponse> {
     const headers = new HttpHeaders({
       'X-Environment': 'production-report',
     });
@@ -21,8 +21,8 @@ export class InventoryService {
     const endpoint = `${this.url}/inventory-report?PageNumber=${PNumber}&PageSize=${PSize}`;
   
 
-    return this.http.get<Inventarios[]>(endpoint, options).pipe(
-     
+    return this.http.get<InventoryResponse>(endpoint, options).pipe(
+      tap(response => console.log('API Response:', response))
     );
   }
 

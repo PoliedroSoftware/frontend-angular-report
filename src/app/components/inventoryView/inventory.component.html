@@ -41,9 +41,9 @@
           <td>{{ row.name }}</td>
           <td>{{ row.presentation}}</td>
           <td>{{ row.costFormatted }}</td>
-          <td>{{ row.costFormatted }}</td>
+          <td>{{ row.saleFormatted }}</td>
           <td>{{ row.inventory}}</td>
-          <td>{{ row.percentage}}</td>
+          <td>{{ row.percentage}}%</td>
           <td>{{ row.subtotalCostFormatted  }}</td>
           <td>{{ row.subtotalSaleFormatted }}</td>
           
@@ -56,14 +56,51 @@
 
     <nav class="pagination-container" aria-label="Page navigation example">
       <ul class="pagination">
-    
-        <li class="page-item"><a class="page-link"  (click)="getInventory(1, this.varPagination)">1</a></li>
-        <li class="page-item"><a class="page-link"  (click)="getInventory(2, this.varPagination)">2</a></li>
-        <li class="page-item"><a class="page-link"  (click)="getInventory(3, this.varPagination)">3</a></li>
-        <li class="page-item"><a class="page-link"  (click)="getInventory(4, this.varPagination)">4</a></li>
-        <li class="page-item"><a class="page-link"  (click)="getInventory(5, this.varPagination)">5</a></li>
-       
+        <!-- Botón Primera Página -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="goToFirstPage()" [class.disabled]="currentPage === 1">
+            &laquo;&laquo;
+          </a>
+        </li>
+        
+        <!-- Botón Página Anterior -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="goToPreviousPage()" [class.disabled]="currentPage === 1">
+            &laquo;
+          </a>
+        </li>
+        
+        <!-- Números de página -->
+        <li class="page-item" 
+            *ngFor="let page of arrayPages" 
+            [class.active]="page === currentPage">
+          <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+        </li>
+        
+        <!-- Botón Página Siguiente -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="goToNextPage()" [class.disabled]="currentPage === totalPages">
+            &raquo;
+          </a>
+        </li>
+        
+        <!-- Botón Última Página -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="goToLastPage()" [class.disabled]="currentPage === totalPages">
+            &raquo;&raquo;
+          </a>
+        </li>
       </ul>
+      
+      <!-- Información de paginación -->
+      <div class="pagination-info mt-2">
+        <small class="text-muted">
+          Mostrando {{ (currentPage - 1) * pageSize + 1 }} - 
+          {{ Math.min(currentPage * pageSize, totalRecords) }} 
+          de {{ totalRecords }} registros
+          (Página {{ currentPage }} de {{ totalPages }})
+        </small>
+      </div>
     </nav>
   </section>
 </div>
