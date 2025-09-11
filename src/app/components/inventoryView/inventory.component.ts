@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Inventarios } from './inventory';
 import { InventoryService } from '@services/inventory.service';
-import { FileDownloadService } from '@services/file-download.service.ts.service';
+import { FileDownloadService } from '@services/file-download.service';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../../auth.config';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +12,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { error } from 'jquery';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
+
 
 @Component({
   selector: 'app-inventory',
@@ -175,19 +176,44 @@ export class InventoryComponent implements OnInit, OnDestroy {
   // Descargar PDF
 
   downloadPDF(): void {
-    this.FileDownloadService.downloadPdf().subscribe(
-      (blob: Blob) => {
-        const a = document.createElement('a');
-        const objectUrl = URL.createObjectURL(blob);
-        a.href = objectUrl;
-        a.download = 'inventario.pdf';
-        a.click();
+    const doc = new jsPDF();
 
-        URL.revokeObjectURL(objectUrl);
-      },
-      (error: any) => {
-        console.error('Error al descargar el PDF:', error);
-      }
-    );
+    // Título del documento
+    doc.text('Reporte de Inventario', 10, 10);
+
+    // Configurar las columnas y filas para la tabla
+    const columns = [
+      'Sku',
+      'Name',
+      'Presentation',
+      'Cost',
+      'Sale',
+      'Inventory',
+      'Percentage',
+      'Subtotal Cost',
+      'Subtotal Sale',
+    ];
+
+    const rows = this.myArray.map((row: any) => [
+      row.sku,
+      row.name,
+      row.presentation,
+      row.costFormatted,
+      row.saleFormatted,
+      row.inventory,
+      `${row.percentage}%`,
+      row.subtotalCostFormatted,
+      row.subtotalSaleFormatted,
+    ]);
+
+    // Generar la tabla en el PDF
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 20,
+    });
+
+    // Descargar el archivo PDF
+    doc.save('inventario.pdf');
   }
 }
