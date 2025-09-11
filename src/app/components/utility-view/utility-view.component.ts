@@ -6,7 +6,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environments/environment';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-
+import { UtilityData, UtilityYear, UtilityMonth, UtilityDay } from './utility';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,7 @@ import { Subject } from 'rxjs';
   templateUrl: './utility-view.component.html',
   styleUrl: './utility-view.component.css',
 })
-export class UtilityComponent  implements OnInit, OnDestroy {
+export class UtilityComponent implements OnInit, OnDestroy {
   utility: any;
 
   valor1: any = 1;
@@ -26,29 +28,69 @@ export class UtilityComponent  implements OnInit, OnDestroy {
   arrayPages: [] = [];
   Resultados: number = 0;
   varPaginacion: any = environment.paginationVar;
-   private destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
-  constructor(
-    private utilityService: UtilityService,
-   
-  ) {
-   
-  }
-
- 
+  constructor(private utilityService: UtilityService) {}
 
   ngOnInit() {
     this.getUtility(1, this.varPaginacion);
   }
 
   getUtility(valor1: any, valor2: any): void {
-    this.utilityService.getUtility(valor1, valor2).pipe(takeUntil(this.destroy$) ).subscribe((response) => {
-      this.utility = response;
-    });
+    this.utilityService
+      .getUtility(valor1, valor2)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.utility = response;
+      });
   }
 
   ngOnDestroy() {
-  this.destroy$.next();   
-  this.destroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  downloadUtilityPDF(type: 'year' | 'month' | 'day'): void {
+  const doc = new jsPDF();
+
+  // Título del documento
+  doc.text(`Reporte de Utilidades por ${type}`, 10, 10);
+
+  let columns: string[] = [];
+  let body: any[] = [];
+
+  // Configurar columnas y filas según el tipo de reporte
+  if (type === 'year') {
+    columns = ['Año', 'Utilidad'];
+    body = (this.utility?.forYear || []).map((row: UtilityYear) => [
+      row.year,
+      row.utilityFormatted,
+    ]);
+  } else if (type === 'month') {
+    columns = ['Año', 'Mes', 'Utilidad'];
+    body = (this.utility?.forMonth || []).map((row: UtilityMonth) => [
+      row.year,
+      row.month,
+      row.utilityFormatted,
+    ]);
+  } else if (type === 'day') {
+    columns = ['Año', 'Mes', 'Fecha', 'Utilidad'];
+    body = (this.utility?.forDay || []).map((row: UtilityDay) => [
+      row.year,
+      row.month,
+      row.date,
+      row.utilityFormatted,
+    ]);
+  }
+
+  // Generar la tabla en el PDF
+  autoTable(doc, {
+    head: [columns],
+    body: body,
+    startY: 20,
+  });
+
+  // Descargar el archivo PDF
+  doc.save(`reporte-utilidades-${type}.pdf`);
 }
 }
