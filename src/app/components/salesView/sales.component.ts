@@ -98,4 +98,8 @@ export class SalesComponent implements OnInit, OnDestroy {
     autoTable(doc, { head: [columns], body: rows, startY: 20 });
     doc.save(`${title.toLowerCase().replace(/\s+/g, '-')}.pdf`);
   }
+
+  // Download PDF
+
+  
 }

@@ -43,7 +43,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   constructor(
     private inventoryService: InventoryService,
-    private FileDownloadService: FileDownloadService,
     private oauthService: OAuthService
   ) {
     this.oauthService.configure(authConfig);

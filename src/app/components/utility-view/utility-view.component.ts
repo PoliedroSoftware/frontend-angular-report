@@ -50,7 +50,7 @@ export class UtilityComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  downloadUtilityPDF(type: 'year' | 'month' | 'day'): void {
+  downloadUtilityPDF(type: 'año' | 'mes' | 'dia'): void {
   const doc = new jsPDF();
 
   // Título del documento
@@ -60,20 +60,20 @@ export class UtilityComponent implements OnInit, OnDestroy {
   let body: any[] = [];
 
   // Configurar columnas y filas según el tipo de reporte
-  if (type === 'year') {
+  if (type === 'año') {
     columns = ['Año', 'Utilidad'];
     body = (this.utility?.forYear || []).map((row: UtilityYear) => [
       row.year,
       row.utilityFormatted,
     ]);
-  } else if (type === 'month') {
+  } else if (type === 'mes') {
     columns = ['Año', 'Mes', 'Utilidad'];
     body = (this.utility?.forMonth || []).map((row: UtilityMonth) => [
       row.year,
       row.month,
       row.utilityFormatted,
     ]);
-  } else if (type === 'day') {
+  } else if (type === 'dia') {
     columns = ['Año', 'Mes', 'Fecha', 'Utilidad'];
     body = (this.utility?.forDay || []).map((row: UtilityDay) => [
       row.year,
