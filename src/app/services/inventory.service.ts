@@ -21,6 +21,13 @@ export class InventoryService {
     const endpoint = `${this.url}/inventory-report?PageNumber=${PNumber}&PageSize=${PSize}`;
   
 
+
+
+
+
+
+    
+
     return this.http.get<InventoryResponse>(endpoint, options).pipe(
       tap(response => console.log('API Response:', response))
     );
