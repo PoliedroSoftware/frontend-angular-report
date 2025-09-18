@@ -4,6 +4,8 @@ import { SuppliersService } from '@services/suppliers.service';
 import { environment } from '@environments/environment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../../auth.config';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-proveedores',
@@ -13,83 +15,6 @@ import { authConfig } from '../../auth.config';
   styleUrl: './suppliers.css',
 })
 export class SuppliersComponent {
-  // Ejemplo. Luego se debe reemplazar estos datos por los que se obtengan de la API. Traer los datos desde la tabla.
-  data = [
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-    { proveedor: 'NAME', saldo: '77.831.294' },
-  ];
-
-  data2 = [
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-    {
-      fecha: '2025-01-22 00:00:00',
-      proveedor: 'NAME',
-      asesor: 'NAME',
-      factura: '77.831.294',
-      saldo: '77.831.294',
-    },
-  ];
-
   proveedores: Array<any> = [];
   miArray: any[][] = [];
   varPaginacion: any = environment.paginationVar;
@@ -128,5 +53,46 @@ export class SuppliersComponent {
     this.suppliersService.getSuppliers(valor1, valor2).subscribe((result) => {
       result.forEach((dato: any) => this.proveedores.push(dato));
     });
+  }
+
+  //Download PDF
+
+  downloadPDF(type: 'proveedor' | 'factura'): void {
+    const doc = new jsPDF();
+    let columns: string[] = [];
+    let rows: any[] = [];
+    let dataArray: any[] = [];
+    let title = '';
+
+    switch (type) {
+      case 'proveedor':
+        dataArray = this.proveedores || [];
+        columns = ['Proveedor', 'Saldo'];
+        rows = dataArray.map((row: any) => [row.proveedor, row.saldo]);
+        title = 'Reporte de Saldo Por Proveedor';
+        break;
+
+      case 'factura':
+        dataArray = this.proveedores || [];
+        columns = ['Fecha', 'Proveedor', 'Asesor', 'Factura', 'Saldo'];
+        rows = dataArray.map((row: any) => [
+          row.fecha,
+          row.proveedor,
+          row.asesor,
+          row.factura,
+          row.saldo,
+        ]);
+        title = 'Reporte de Saldo Por Facturas';
+        break;
+    }
+
+    if (!Array.isArray(dataArray)) {
+      console.error(`Error: dataArray no es un array`, dataArray);
+      return;
+    }
+
+    doc.text(title, 10, 10);
+    autoTable(doc, { head: [columns], body: rows, startY: 20 });
+    doc.save(`${title.toLowerCase().replace(/\s+/g, '-')}.pdf`);
   }
 }
